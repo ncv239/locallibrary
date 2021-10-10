@@ -3,13 +3,29 @@
 {% block content %}
   <h1>Book List</h1>
   {% if book_list %}
-  <ul>
+  {% comment %} <ul> {% endcomment %}
+  <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for book in book_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}}) {% if perms.catalog.can_modify_authors %}- <a href="{% url 'book-delete' book.id %}">Delete</a>  {% endif %}
-      </li>
+      <div class="card  mx-3" style="width: 18rem;">
+        {% comment %} <img src="..." class="card-img-top" alt="..."> {% endcomment %}
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ book.title }}</h5>
+          <p class="card-text text-muted fs-6">{{ book.summary|slice:"0:200" }} ...</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item fst-italic">Author: {{book.author}}</li>
+          <li class="list-group-item fst-italic">Genre: {{ book.genre.all|join:", " }}</li>
+          <li class="list-group-item fst-italic">Language: {{ book.language }}</li>
+        </ul>
+        <div class="card-body">
+          <a class="btn btn-secondary bt-sm" href="{{ book.get_absolute_url }}" class="card-link">Details</a>
+          {% if perms.catalog.can_modify_authors %}
+            <a class="btn btn-outline-danger float-end" href="{% url 'book-delete' book.id %}" class="card-link">Delete</a>
+          {% endif %}
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+  {% comment %} </ul> {% endcomment %}
   {% else %}
     <p>There are no books in the library.</p>
   {% endif %}

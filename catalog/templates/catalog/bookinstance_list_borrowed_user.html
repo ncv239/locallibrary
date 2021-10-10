@@ -4,14 +4,20 @@
     <h1>Borrowed books</h1>
 
     {% if bookinstance_list %}
-    <ul>
+    <ol class="list-group list-group-numbered">
 
       {% for bookinst in bookinstance_list %}
-      <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a> ({{ bookinst.due_back }})
+      <li class="list-group-item list-group-item-action d-flex {% if bookinst.is_overdue %}list-group-item-danger{% endif %}">
+        <div class="col-9"><a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a></div>
+        <div class="col">({{ bookinst.due_back }})</div>
+        {% if perms.catalog.can_renew %}
+          <div class="col"><a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a></div>
+        {% endif %}
+        <span class="badge bg-primary rounded-pill">{{ bookinst.status }}</span>
       </li>
+
       {% endfor %}
-    </ul>
+    </ol>
 
     {% else %}
       <p>There are no books borrowed.</p>
