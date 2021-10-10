@@ -1,3 +1,9 @@
-*.pyc
+# Database
 *.sqlite3
+
+# Python Cache files
 **/__pycache__/
+*.pyc
+
+# Text backup files
+*.bak
